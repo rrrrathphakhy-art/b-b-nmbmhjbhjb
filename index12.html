@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>สัตว์ปีก 100 ชนิด</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Prompt',sans-serif;
+}
+
+body{
+  background:linear-gradient(135deg,#1e3c72,#2a5298);
+  color:white;
+  min-height:100vh;
+}
+
+header{
+  text-align:center;
+  padding:40px 20px;
+}
+
+header h1{
+  font-size:2.8rem;
+}
+
+.search-box{
+  text-align:center;
+  margin:20px;
+}
+
+.search-box input{
+  padding:10px 20px;
+  width:300px;
+  border-radius:25px;
+  border:none;
+  outline:none;
+  text-align:center;
+}
+
+.container{
+  padding:30px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:rgba(255,255,255,0.1);
+  border-radius:15px;
+  padding:20px;
+  text-align:center;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.card:hover{
+  transform:translateY(-8px);
+  background:rgba(255,255,255,0.2);
+}
+
+.detail-page{
+  display:none;
+  padding:40px;
+  text-align:center;
+}
+
+button{
+  margin-top:20px;
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  cursor:pointer;
+  background:#ffcc70;
+  font-weight:bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🐦 สัตว์ปีก 100 ชนิด</h1>
+  <p>คลิกเพื่อดูรายละเอียด</p>
+</header>
+
+<div class="search-box">
+  <input type="text" id="searchInput" placeholder="ค้นหาชื่อสัตว์ปีก...">
+</div>
+
+<div class="container" id="birdContainer"></div>
+
+<div class="detail-page" id="detailPage">
+  <h2 id="detailName"></h2>
+  <p id="detailDesc" style="margin-top:15px;"></p>
+  <button onclick="goBack()">← กลับหน้าหลัก</button>
+</div>
+
+<script>
+
+const birdNames = [
+"นกยูง","นกอินทรี","นกแก้ว","นกฮูก","นกเหยี่ยว",
+"นกฟลามิงโก","นกเพนกวิน","นกหงส์","นกเป็ด","นกไก่",
+"นกพิราบ","นกนางนวล","นกหัวขวาน","นกกระเต็น","นกเงือก",
+"นกทูแคน","นกกระเรียน","นกกระจอก","นกกางเขน","นกกระสา"
+];
+
+let birds = [];
+
+for(let i=0;i<100;i++){
+  let name = birdNames[i % birdNames.length] + " " + (i+1);
+  birds.push({
+    name:name,
+    desc:"สัตว์ปีกชนิดนี้มีลักษณะเด่นคือมีปีกและขน สามารถบินได้ (บางชนิดอาจบินไม่ได้) อาศัยอยู่ตามธรรมชาติ และวางไข่ในการสืบพันธุ์"
+  });
+}
+
+const container = document.getElementById("birdContainer");
+const detailPage = document.getElementById("detailPage");
+
+function displayBirds(list){
+  container.innerHTML="";
+  list.forEach(bird=>{
+    const card = document.createElement("div");
+    card.className="card";
+    card.innerHTML=`<h3>${bird.name}</h3>`;
+    card.onclick=()=>showDetail(bird);
+    container.appendChild(card);
+  });
+}
+
+function showDetail(bird){
+  document.querySelector(".container").style.display="none";
+  document.querySelector(".search-box").style.display="none";
+  detailPage.style.display="block";
+  document.getElementById("detailName").innerText=bird.name;
+  document.getElementById("detailDesc").innerText=bird.desc;
+}
+
+function goBack(){
+  detailPage.style.display="none";
+  document.querySelector(".container").style.display="grid";
+  document.querySelector(".search-box").style.display="block";
+}
+
+displayBirds(birds);
+
+document.getElementById("searchInput").addEventListener("keyup",function(){
+  const search=this.value.toLowerCase();
+  const filtered=birds.filter(bird=>bird.name.toLowerCase().includes(search));
+  displayBirds(filtered);
+});
+
+</script>
+
+</body>
+</html>
